@@ -18,7 +18,6 @@ coverage/
 
 /build/
 /scripts/build/
-dist/
 dist-ts/
 **/www/build/
 
