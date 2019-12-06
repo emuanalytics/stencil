@@ -26,20 +26,7 @@ dist-ts/
 /compiler
 /hydrate
 /dev-server
-/internal
-/mock-doc
-/polyfills
 /server
-/testing
-/build-conditionals
-/runtime
-
-/screenshot/index.js
-/screenshot/package.json
-/screenshot/connector.js
-/screenshot/local-connector.js
-/screenshot/pixel-match.js
-/screenshot/*.d.ts
 
 test/**/www/*
 test/**/hydrate/*
