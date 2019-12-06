@@ -2,7 +2,7 @@ import * as d from '../../declarations';
 import { buildEvents } from '../../compiler/events';
 import { compile } from '../compile-module';
 import { createCompiler } from '../compiler';
-import { createStencilSys } from '../sys/stencil-sys';
+import { createSystem } from '../sys/stencil-sys';
 import { initNodeWorkerThread } from '../../sys/node_next/worker/worker-child';
 import { initWebWorkerThread } from '../sys/worker/web-worker-thread';
 import { IS_NODE_ENV, IS_WEB_WORKER_ENV } from '../sys/environment';
@@ -15,7 +15,7 @@ import { transformCssToEsm } from '../../compiler/style/css-to-esm';
 export const createWorkerContext = (events: d.BuildEvents): d.CompilerWorkerContext => {
   let config: d.Config;
   let compiler: d.CompilerNext;
-  let sys: d.CompilerSystemAsync;
+  let sys: d.CompilerSystem;
   let watcher: d.CompilerWatcher;
 
   const getCompiler = async () => {
@@ -48,7 +48,7 @@ export const createWorkerContext = (events: d.BuildEvents): d.CompilerWorkerCont
   };
 
   const initCompiler = async () => {
-    sys = createStencilSys();
+    sys = createSystem();
   };
 
   const loadCompilerConfig = async (inputConfig: d.Config) => {

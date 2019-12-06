@@ -1,4 +1,4 @@
-import * as d from '../../declarations';
+import { CompilerFileWatcherCallback, CompilerFsStats, CompilerSystem, CompilerSystemMakeDirectoryOptions, CopyResults, CopyTask, SystemDetails } from '../../declarations';
 import { buildEvents } from '../../compiler/events';
 import { createWebWorkerMainController } from '../sys/worker/web-worker-main';
 import { IS_NODE_ENV, IS_WEB_WORKER_ENV } from './environment';
@@ -6,7 +6,7 @@ import { normalizePath } from '@utils';
 import path from 'path';
 
 
-export const createStencilSys = () => {
+export const createSystem = () => {
   const items = new Map<string, FsItem>();
   const destroys = new Set<() => Promise<void> | void>();
 
@@ -73,7 +73,7 @@ export const createStencilSys = () => {
     throw new Error('unable to find executing path');
   };
 
-  const mkdirSync = (p: string, _opts?: d.CompilerSystemMakeDirectoryOptions) => {
+  const mkdirSync = (p: string, _opts?: CompilerSystemMakeDirectoryOptions) => {
     p = normalize(p);
     const item = items.get(p);
     if (!item) {
@@ -93,7 +93,7 @@ export const createStencilSys = () => {
     return true;
   };
 
-  const mkdir = async (p: string, opts?: d.CompilerSystemMakeDirectoryOptions) => mkdirSync(p, opts);
+  const mkdir = async (p: string, opts?: CompilerSystemMakeDirectoryOptions) => mkdirSync(p, opts);
 
   const readdirSync = (p: string) => {
     p = normalize(p);
@@ -145,7 +145,7 @@ export const createStencilSys = () => {
     p = normalize(p);
     const item = items.get(p);
     if (item && (item.isDirectory || item.isFile)) {
-      const s: d.CompilerFsStats = {
+      const s: CompilerFsStats = {
         isDirectory: () => item.isDirectory,
         isFile: () => item.isFile,
         isSymbolicLink: () => false,
@@ -174,7 +174,7 @@ export const createStencilSys = () => {
 
   const unlink = async (p: string) => unlinkSync(p);
 
-  const watchDirectory = (p: string, dirWatcherCallback: d.CompilerFileWatcherCallback) => {
+  const watchDirectory = (p: string, dirWatcherCallback: CompilerFileWatcherCallback) => {
     p = normalize(p);
     const item = items.get(p);
     if (item) {
@@ -206,7 +206,7 @@ export const createStencilSys = () => {
     };
   };
 
-  const watchFile = (p: string, fileWatcherCallback: d.CompilerFileWatcherCallback) => {
+  const watchFile = (p: string, fileWatcherCallback: CompilerFileWatcherCallback) => {
     p = normalize(p);
     const item = items.get(p);
     if (item) {
@@ -289,8 +289,8 @@ export const createStencilSys = () => {
 
   const writeFile = async (p: string, data: string) => writeFileSync(p, data);
 
-  const copy = async (copyTasks: Required<d.CopyTask>[], srcDir: string) => {
-    const results: d.CopyResults = {
+  const copy = async (copyTasks: Required<CopyTask>[], srcDir: string) => {
+    const results: CopyResults = {
       diagnostics: [],
       dirPaths: [],
       filePaths: []
@@ -304,7 +304,7 @@ export const createStencilSys = () => {
 
   mkdirSync('/');
 
-  const sys: d.CompilerSystem = {
+  const sys: CompilerSystem = {
     events,
     access,
     accessSync,
@@ -312,7 +312,7 @@ export const createStencilSys = () => {
     copyFile,
     destroy,
     encodeToBase64,
-    fileWatchTimeout,
+    watchTimeout: fileWatchTimeout,
     getCurrentDirectory,
     getCompilerExecutingPath,
     mkdir,
@@ -352,12 +352,12 @@ interface FsItem {
   dirname: string;
   isFile: boolean;
   isDirectory: boolean;
-  watcherCallback: d.CompilerFileWatcherCallback;
+  watcherCallback: CompilerFileWatcherCallback;
 }
 
 
 const getDetails = () => {
-  const details: d.SystemDetails = {
+  const details: SystemDetails = {
     cpuModel: '',
     cpus: -1,
     freemem() {
