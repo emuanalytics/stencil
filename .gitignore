@@ -30,7 +30,6 @@ dist-ts/
 /mock-doc
 /polyfills
 /server
-/sys
 /testing
 /build-conditionals
 /runtime
